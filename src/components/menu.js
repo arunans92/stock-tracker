@@ -8,58 +8,39 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import StarIcon from '@mui/icons-material/Star';
+import { Link } from "gatsby";
 
 export const mainListItems = (
   <React.Fragment>
-    <ListItemButton>
+    <ListItemButton component={Link} to="/">
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
       <ListItemText primary="Market Data" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton component={Link} to="/favorites">
       <ListItemIcon>
         <StarIcon />
       </ListItemIcon>
       <ListItemText primary="Favorites" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton component={Link} to="/historical-data">
+      <ListItemIcon>
+        <AssignmentIcon />
+      </ListItemIcon>
+      <ListItemText primary="Historical Data" />
+    </ListItemButton>
+    <ListItemButton component={Link} to="/pricing-config">
       <ListItemIcon>
         <LayersIcon />
       </ListItemIcon>
       <ListItemText primary="Pricing Configuration" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton component={Link} to="/batch-report">
       <ListItemIcon>
         <BarChartIcon />
       </ListItemIcon>
       <ListItemText primary="Batch Reports" />
-    </ListItemButton>
-  </React.Fragment>
-);
-
-export const secondaryListItems = (
-  <React.Fragment>
-    {/* <ListSubheader component="div" inset>
-      Historical reports
-    </ListSubheader> */}
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Current month" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Last 3 Months" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Custom Selection" />
     </ListItemButton>
   </React.Fragment>
 );

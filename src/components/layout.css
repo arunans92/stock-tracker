@@ -16,6 +16,9 @@
 .ml-2{
   margin-left: .5rem;
 }
+.w-100{
+  width: 100%;
+}
 .userRole{
   width: 130px;
 }
@@ -26,4 +29,8 @@
 .userRole .role{
   display: block;
   padding-top: 10px;
+}
+.appHeaderTitle {
+  color: #ffffff;
+  text-decoration: none;
 }

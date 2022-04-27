@@ -11,12 +11,12 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import BubbleChartIcon from '@mui/icons-material/BubbleChart';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { mainListItems, secondaryListItems } from './menu';
+import { mainListItems } from './menu';
+import { Link } from "gatsby"
 
 const drawerWidth = 240;
 
@@ -96,7 +96,9 @@ const Header = ({ siteTitle }) => {
             noWrap
             sx={{ flexGrow: 1 }}
           >
-            {siteTitle} <BubbleChartIcon />
+            <Link to="/" className="appHeaderTitle">
+              {siteTitle} <BubbleChartIcon />
+            </Link>
           </Typography>
           <Typography component="p" className="userRole"
             sx={{
@@ -133,7 +135,6 @@ const Header = ({ siteTitle }) => {
         <List component="nav">
           {mainListItems}
           <Divider sx={{ my: 1 }} />
-          {secondaryListItems}
         </List>
       </Drawer>
     </>
