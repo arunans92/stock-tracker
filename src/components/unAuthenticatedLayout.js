@@ -42,6 +42,7 @@ const AuthenticatedLayout = ({ children, data }) => {
                             sx={{ flexGrow: 1, pt: 4 }}
                         >
                             {'Please Login to use Stock Tracker Application'}
+                            <br /> {`${process.env.GATSBY_APP_URL}`}
                         </Typography>
                         <Footer siteTitle={data?.title || `Title`} siteUrl={data?.siteUrl || ''} />
                     </Container>

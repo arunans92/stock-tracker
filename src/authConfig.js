@@ -3,8 +3,8 @@ export const msalConfig = {
     auth: {
         clientId: "ca2af263-a0fa-4992-bf7e-aa1267cf755a",
         authority: "https://login.microsoftonline.com/common",
-        redirectUri: "http://localhost:8000/",
-        postLogoutRedirectUri: "http://localhost:8000/"
+        redirectUri: `${process.env.GATSBY_APP_URL}`,
+        postLogoutRedirectUri: `${process.env.GATSBY_APP_URL}`
     },
     cache: {
         cacheLocation: "sessionStorage", // Configures cache location. "sessionStorage" is more secure, but "localStorage" gives you SSO between tabs.
