@@ -10,13 +10,13 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import BubbleChartIcon from '@mui/icons-material/BubbleChart';
-import LogoutIcon from '@mui/icons-material/Logout';
 import { mainListItems } from './menu';
 import { Link } from "gatsby"
+
+import SignInSignOutButton from "./SignInSignOutButton";
 
 const drawerWidth = 240;
 
@@ -64,7 +64,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-const Header = ({ siteTitle }) => {
+const Header = ({ siteTitle, accounts }) => {
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -77,18 +77,20 @@ const Header = ({ siteTitle }) => {
             pr: '24px', // keep right padding when drawer closed
           }}
         >
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={toggleDrawer}
-            sx={{
-              marginRight: '36px',
-              ...(open && { display: 'none' }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
+          {accounts && accounts[0] && (
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={toggleDrawer}
+              sx={{
+                marginRight: '36px',
+                ...(open && { display: 'none' }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
           <Typography
             component="h1"
             variant="h6"
@@ -100,43 +102,44 @@ const Header = ({ siteTitle }) => {
               {siteTitle} <BubbleChartIcon />
             </Link>
           </Typography>
-          <Typography component="p" className="userRole"
-            sx={{
-              ...(open && { display: 'none' }),
-            }}>
-            <Avatar component="span" className="avatar">A</Avatar>
-            <span className="ml-2 role" >Analyst</span>
-          </Typography>
-          <Button color="inherit">
-            <LogoutIcon />
-            <span className="ml-2" >Logout</span>
-          </Button>
+          {accounts && accounts[0] && (
+            <Typography component="p" className="userRole"
+              sx={{
+                ...(open && { display: 'none' }),
+              }}>
+              <Avatar component="span" className="avatar">A</Avatar>
+              <span className="mr-2 role" >{accounts[0].name + ' | Analyst'}</span>
+            </Typography>
+          )}
+          <SignInSignOutButton />
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
-        <Toolbar
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            px: [1],
-          }}
-        >
-          <Typography component="p" sx={{ flexGrow: 1 }} className="userRole">
-            <Avatar component="span" className="avatar">A</Avatar>
-            <span className="ml-2 role" >Analyst</span>
-          </Typography>
+      {accounts && accounts[0] && (
+        <Drawer variant="permanent" open={open}>
+          <Toolbar
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              px: [1],
+            }}
+          >
+            <Typography component="p" sx={{ flexGrow: 1 }} className="userRole">
+              <Avatar component="span" className="avatar">A</Avatar>
+              <span className="mr-2 role" >{accounts[0].name}</span>
+            </Typography>
 
-          <IconButton onClick={toggleDrawer}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </Toolbar>
-        <Divider />
-        <List component="nav">
-          {mainListItems}
-          <Divider sx={{ my: 1 }} />
-        </List>
-      </Drawer>
+            <IconButton onClick={toggleDrawer}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </Toolbar>
+          <Divider />
+          <List component="nav">
+            {mainListItems}
+            <Divider sx={{ my: 1 }} />
+          </List>
+        </Drawer>
+      )}
     </>
   )
 }

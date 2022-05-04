@@ -16,11 +16,15 @@
 .ml-2{
   margin-left: .5rem;
 }
+.mr-2{
+  margin-right: .5rem;
+}
+
 .w-100{
   width: 100%;
 }
 .userRole{
-  width: 130px;
+  display: flex;
 }
 .userRole .avatar{
   float: left;

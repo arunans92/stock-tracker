@@ -1,60 +1,50 @@
 import * as React from "react"
 import PropTypes from "prop-types"
 import { useStaticQuery, graphql } from "gatsby"
-
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import theme from '../theme'
-
-import Header from "./header"
-import Footer from "./footer"
 import "./layout.css"
 
-const mdTheme = theme;
+import { PublicClientApplication } from "@azure/msal-browser";
+import { MsalProvider, AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
+import { msalConfig } from "../authConfig";
+import { CustomNavigationClient } from "../utils/NavigationClient";
 
-const Layout = ({ children }) => {
+import AuthenticatedLayout from "./authenticatedLayout";
+import UnAuthenticatedLayout from "./unAuthenticatedLayout";
+
+const msalInstance = new PublicClientApplication(msalConfig);
+
+
+const MainContent = ({ children }) => {
   const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title,
-          siteUrl
-        }
+  query SiteTitleQuery {
+    site {
+      siteMetadata {
+        title,
+        siteUrl
       }
     }
+  }
   `)
 
-  return (
-    <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
-          }}
-        >
-          <Container maxWidth="lg" sx={{ mt: 10, mb: 4 }}>
-            <main>{children}</main>
-            <Footer siteTitle={data.site.siteMetadata?.title || `Title`} siteUrl={data.site.siteMetadata.siteUrl} />
-          </Container>
-        </Box>
-      </Box>
-    </ThemeProvider>
-  )
-}
+  const navigationClient = new CustomNavigationClient();
+  msalInstance.setNavigationClient(navigationClient);
 
-Layout.propTypes = {
+  return (
+    <MsalProvider instance={msalInstance}>
+      <AuthenticatedTemplate>
+        <AuthenticatedLayout children={children} data={data.site.siteMetadata ? data.site.siteMetadata : null} />
+      </AuthenticatedTemplate>
+
+      <UnauthenticatedTemplate>
+        <UnAuthenticatedLayout data={data.site.siteMetadata ? data.site.siteMetadata : null} />
+      </UnauthenticatedTemplate>
+    </MsalProvider>
+  );
+};
+
+
+MainContent.propTypes = {
   children: PropTypes.node.isRequired,
 }
 
-export default Layout
+export default MainContent
