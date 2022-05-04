@@ -12,8 +12,8 @@ import Footer from "./footer"
 import "./layout.css"
 
 
-const AuthenticatedLayout = ({ children, data }) => {
-
+const UnAuthenticatedLayout = ({ isInvalidUser, data }) => {
+    
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ display: 'flex' }}>
@@ -41,8 +41,7 @@ const AuthenticatedLayout = ({ children, data }) => {
                             align="center"
                             sx={{ flexGrow: 1, pt: 4 }}
                         >
-                            {'Please Login to use Stock Tracker Application'}
-                            <br /> {`${process.env.GATSBY_APP_URL}`}
+                            {isInvalidUser ? 'User is not part of Stock Tracker Application' : 'Please Login to use Stock Tracker Application'}
                         </Typography>
                         <Footer siteTitle={data?.title || `Title`} siteUrl={data?.siteUrl || ''} />
                     </Container>
@@ -52,4 +51,4 @@ const AuthenticatedLayout = ({ children, data }) => {
     )
 }
 
-export default AuthenticatedLayout
+export default UnAuthenticatedLayout

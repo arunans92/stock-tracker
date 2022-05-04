@@ -13,7 +13,7 @@ import Avatar from '@mui/material/Avatar';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import BubbleChartIcon from '@mui/icons-material/BubbleChart';
-import { mainListItems } from './menu';
+import MainListItems from './menu';
 import { Link } from "gatsby"
 
 import SignInSignOutButton from "./SignInSignOutButton";
@@ -64,11 +64,13 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-const Header = ({ siteTitle, accounts }) => {
+const Header = ({ siteTitle, accounts, systemAccount }) => {
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  const isAdmin = systemAccount && systemAccount.role === 'Admin' ? true : false;
+  
   return (
     <>
       <AppBar position="absolute" open={open}>
@@ -77,7 +79,7 @@ const Header = ({ siteTitle, accounts }) => {
             pr: '24px', // keep right padding when drawer closed
           }}
         >
-          {accounts && accounts[0] && (
+          {systemAccount && (
             <IconButton
               edge="start"
               color="inherit"
@@ -102,19 +104,19 @@ const Header = ({ siteTitle, accounts }) => {
               {siteTitle} <BubbleChartIcon />
             </Link>
           </Typography>
-          {accounts && accounts[0] && (
+          {systemAccount && (
             <Typography component="p" className="userRole"
               sx={{
                 ...(open && { display: 'none' }),
               }}>
-              <Avatar component="span" className="avatar">A</Avatar>
-              <span className="mr-2 role" >{accounts[0].name + ' | Analyst'}</span>
+              <Avatar component="span" className="avatar">{systemAccount.name.slice(0, 1)}</Avatar>
+              <span className="mr-2 role" >{systemAccount.name + ' | ' + systemAccount.role}</span>
             </Typography>
           )}
           <SignInSignOutButton />
         </Toolbar>
       </AppBar>
-      {accounts && accounts[0] && (
+      {systemAccount && (
         <Drawer variant="permanent" open={open}>
           <Toolbar
             sx={{
@@ -135,7 +137,7 @@ const Header = ({ siteTitle, accounts }) => {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {mainListItems}
+            <MainListItems isAdmin={isAdmin} />
             <Divider sx={{ my: 1 }} />
           </List>
         </Drawer>

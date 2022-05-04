@@ -8,8 +8,8 @@ import Seo from "../components/seo"
 const MarketData = () => (
   <Layout>
     <Seo title="Market Data" />
-    <h1>Market Data</h1>
-    <p>Market Data Table comes here.</p>
+    <h1>Welcome to Stock Tracker App</h1>
+    <p>A one-stop shop for market prices.</p>
     {/* <StaticImage
       src="../images/gatsby-astronaut.png"
       width={300}

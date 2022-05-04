@@ -12,15 +12,28 @@ import Footer from "./footer"
 import "./layout.css"
 import { useMsal } from "@azure/msal-react";
 
+import userDetails from "../userDetails"
+import UnAuthenticatedLayout from "./unAuthenticatedLayout"
 
 const AuthenticatedLayout = ({ children, data }) => {
     const { accounts } = useMsal();
 
-    return (
+    let isValidUser = false;
+    let validUserList = [];
+
+    if (accounts && accounts[0]) {
+        validUserList = userDetails.filter(user => user.username === accounts[0].username);
+
+        if (validUserList && validUserList.length > 0) {
+            isValidUser = true
+        }
+    }
+
+    return isValidUser ? (
         <ThemeProvider theme={theme}>
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
-                <Header accounts={accounts} siteTitle={data?.title || `Title`} />
+                <Header systemAccount={validUserList[0]} accounts={accounts} siteTitle={data?.title || `Title`} />
                 <Box
                     component="main"
                     sx={{
@@ -40,7 +53,9 @@ const AuthenticatedLayout = ({ children, data }) => {
                 </Box>
             </Box>
         </ThemeProvider>
-    )
+    ) : (
+            <UnAuthenticatedLayout data={data} isInvalidUser={!isValidUser} />
+        )
 }
 
 

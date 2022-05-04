@@ -10,37 +10,49 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import StarIcon from '@mui/icons-material/Star';
 import { Link } from "gatsby";
 
-export const mainListItems = (
-  <React.Fragment>
-    <ListItemButton component={Link} to="/">
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Market Data" />
-    </ListItemButton>
-    <ListItemButton component={Link} to="/favorites">
-      <ListItemIcon>
-        <StarIcon />
-      </ListItemIcon>
-      <ListItemText primary="Favorites" />
-    </ListItemButton>
-    <ListItemButton component={Link} to="/historical-data">
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Historical Data" />
-    </ListItemButton>
-    <ListItemButton component={Link} to="/pricing-config">
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <ListItemText primary="Pricing Configuration" />
-    </ListItemButton>
-    <ListItemButton component={Link} to="/batch-report">
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Batch Reports" />
-    </ListItemButton>
-  </React.Fragment>
-);
+const MainListItems = (isAdmin) => {
+  return (
+    <React.Fragment>
+      {!isAdmin.isAdmin ? (
+        <React.Fragment>
+          <ListItemButton component={Link} to="/market-data">
+            <ListItemIcon>
+              <DashboardIcon />
+            </ListItemIcon>
+            <ListItemText primary="Market Data" />
+          </ListItemButton>
+          <ListItemButton component={Link} to="/favorites">
+            <ListItemIcon>
+              <StarIcon />
+            </ListItemIcon>
+            <ListItemText primary="Favorites" />
+          </ListItemButton>
+          <ListItemButton component={Link} to="/historical-data">
+            <ListItemIcon>
+              <AssignmentIcon />
+            </ListItemIcon>
+            <ListItemText primary="Historical Data" />
+          </ListItemButton>
+        </React.Fragment>
+      ) : (
+          <React.Fragment>
+            <ListItemButton component={Link} to="/pricing-config">
+              <ListItemIcon>
+                <LayersIcon />
+              </ListItemIcon>
+              <ListItemText primary="Pricing Configuration" />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/batch-report">
+              <ListItemIcon>
+                <BarChartIcon />
+              </ListItemIcon>
+              <ListItemText primary="Batch Reports" />
+            </ListItemButton>
+          </React.Fragment>
+        )
+      }
+    </React.Fragment>
+  )
+}
+
+export default MainListItems

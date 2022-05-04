@@ -4,13 +4,13 @@ import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 
-const Favorites = () => (
+const MarketData = () => (
   <Layout>
-    <Seo title="Favorites" />
-    <h1>Favorites Market Data</h1>
-    <p>Favorites Market Data Table comes here</p>
+    <Seo title="Market Data" />
+    <h1>Market Data</h1>
+    <p>Market Data Table comes here.</p>
     <Link to="/">Go back to the homepage</Link>
   </Layout>
 )
 
-export default Favorites
+export default MarketData
