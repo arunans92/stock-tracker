@@ -38,3 +38,17 @@
   color: #ffffff;
   text-decoration: none;
 }
+
+.pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-spacing: normal;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+  tab-size: 4;
+  hyphens: none;
+  overflow: hidden auto;
+  border-width: 0px;
+  font-size: 12px;
+}

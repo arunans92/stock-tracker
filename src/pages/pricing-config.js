@@ -13,136 +13,138 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
-const top100Films = [
-  { label: 'The Shawshank Redemption', year: 1994 },
-  { label: 'The Godfather', year: 1972 },
-  { label: 'The Godfather: Part II', year: 1974 },
-  { label: 'The Dark Knight', year: 2008 },
-  { label: '12 Angry Men', year: 1957 },
-  { label: "Schindler's List", year: 1993 },
-  { label: 'Pulp Fiction', year: 1994 },
-  {
-    label: 'The Lord of the Rings: The Return of the King',
-    year: 2003,
-  },
-  { label: 'The Good, the Bad and the Ugly', year: 1966 },
-  { label: 'Fight Club', year: 1999 },
-  {
-    label: 'The Lord of the Rings: The Fellowship of the Ring',
-    year: 2001,
-  },
-  {
-    label: 'Star Wars: Episode V - The Empire Strikes Back',
-    year: 1980,
-  },
-  { label: 'Forrest Gump', year: 1994 },
-  { label: 'Inception', year: 2010 },
-  {
-    label: 'The Lord of the Rings: The Two Towers',
-    year: 2002,
-  },
-  { label: "One Flew Over the Cuckoo's Nest", year: 1975 },
-  { label: 'Goodfellas', year: 1990 },
-  { label: 'The Matrix', year: 1999 },
-  { label: 'Seven Samurai', year: 1954 },
-  {
-    label: 'Star Wars: Episode IV - A New Hope',
-    year: 1977,
-  },
-  { label: 'City of God', year: 2002 },
-  { label: 'Se7en', year: 1995 },
-  { label: 'The Silence of the Lambs', year: 1991 },
-  { label: "It's a Wonderful Life", year: 1946 },
-  { label: 'Life Is Beautiful', year: 1997 },
-  { label: 'The Usual Suspects', year: 1995 },
-  { label: 'Léon: The Professional', year: 1994 },
-  { label: 'Spirited Away', year: 2001 },
-  { label: 'Saving Private Ryan', year: 1998 },
-  { label: 'Once Upon a Time in the West', year: 1968 },
-  { label: 'American History X', year: 1998 },
-  { label: 'Interstellar', year: 2014 },
-  { label: 'Casablanca', year: 1942 },
-  { label: 'City Lights', year: 1931 },
-  { label: 'Psycho', year: 1960 },
-  { label: 'The Green Mile', year: 1999 },
-  { label: 'The Intouchables', year: 2011 },
-  { label: 'Modern Times', year: 1936 },
-  { label: 'Raiders of the Lost Ark', year: 1981 },
-  { label: 'Rear Window', year: 1954 },
-  { label: 'The Pianist', year: 2002 },
-  { label: 'The Departed', year: 2006 },
-  { label: 'Terminator 2: Judgment Day', year: 1991 },
-  { label: 'Back to the Future', year: 1985 },
-  { label: 'Whiplash', year: 2014 },
-  { label: 'Gladiator', year: 2000 },
-  { label: 'Memento', year: 2000 },
-  { label: 'The Prestige', year: 2006 },
-  { label: 'The Lion King', year: 1994 },
-  { label: 'Apocalypse Now', year: 1979 },
-  { label: 'Alien', year: 1979 },
-  { label: 'Sunset Boulevard', year: 1950 },
-  {
-    label: 'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb',
-    year: 1964,
-  },
-  { label: 'The Great Dictator', year: 1940 },
-  { label: 'Cinema Paradiso', year: 1988 },
-  { label: 'The Lives of Others', year: 2006 },
-  { label: 'Grave of the Fireflies', year: 1988 },
-  { label: 'Paths of Glory', year: 1957 },
-  { label: 'Django Unchained', year: 2012 },
-  { label: 'The Shining', year: 1980 },
-  { label: 'WALL·E', year: 2008 },
-  { label: 'American Beauty', year: 1999 },
-  { label: 'The Dark Knight Rises', year: 2012 },
-  { label: 'Princess Mononoke', year: 1997 },
-  { label: 'Aliens', year: 1986 },
-  { label: 'Oldboy', year: 2003 },
-  { label: 'Once Upon a Time in America', year: 1984 },
-  { label: 'Witness for the Prosecution', year: 1957 },
-  { label: 'Das Boot', year: 1981 },
-  { label: 'Citizen Kane', year: 1941 },
-  { label: 'North by Northwest', year: 1959 },
-  { label: 'Vertigo', year: 1958 },
-  {
-    label: 'Star Wars: Episode VI - Return of the Jedi',
-    year: 1983,
-  },
-  { label: 'Reservoir Dogs', year: 1992 },
-  { label: 'Braveheart', year: 1995 },
-  { label: 'M', year: 1931 },
-  { label: 'Requiem for a Dream', year: 2000 },
-  { label: 'Amélie', year: 2001 },
-  { label: 'A Clockwork Orange', year: 1971 },
-  { label: 'Like Stars on Earth', year: 2007 },
-  { label: 'Taxi Driver', year: 1976 },
-  { label: 'Lawrence of Arabia', year: 1962 },
-  { label: 'Double Indemnity', year: 1944 },
-  {
-    label: 'Eternal Sunshine of the Spotless Mind',
-    year: 2004,
-  },
-  { label: 'Amadeus', year: 1984 },
-  { label: 'To Kill a Mockingbird', year: 1962 },
-  { label: 'Toy Story 3', year: 2010 },
-  { label: 'Logan', year: 2017 },
-  { label: 'Full Metal Jacket', year: 1987 },
-  { label: 'Dangal', year: 2016 },
-  { label: 'The Sting', year: 1973 },
-  { label: '2001: A Space Odyssey', year: 1968 },
-  { label: "Singin' in the Rain", year: 1952 },
-  { label: 'Toy Story', year: 1995 },
-  { label: 'Bicycle Thieves', year: 1948 },
-  { label: 'The Kid', year: 1921 },
-  { label: 'Inglourious Basterds', year: 2009 },
-  { label: 'Snatch', year: 2000 },
-  { label: '3 Idiots', year: 2009 },
-  { label: 'Monty Python and the Holy Grail', year: 1975 },
+const orderBy = [
+  { label: 'Ascending', order: 'Ascending' },
+  { label: 'Descending', order: 'Descending' }
 ];
+
+const symbols = [
+  { label: 'TECHM.NS', symbol: 'TECHM.NS' },
+  { label: 'MARUTI.NS', symbol: 'MARUTI.NS' },
+  { label: 'ONGC.NS', symbol: 'ONGC.NS' },
+  { label: 'ICICIBANK.NS', symbol: 'ICICIBANK.NS' },
+  { label: 'WIPRO.NS', symbol: 'WIPRO.NS' },
+  { label: 'ULTRACEMCO.NS', symbol: 'ULTRACEMCO.NS' },
+  { label: 'TITAN.NS', symbol: 'TITAN.NS' },
+  { label: 'SHREECEM.NS', symbol: 'SHREECEM.NS' }
+]
+
+const endPoints = [
+  { endPoint: 'stock-prices', label: 'Historic Stock Prices', isDateReq: true, isOrderByReq: true },
+  { endPoint: 'stock-statistics', label: 'Live Stock Statistics', isDateReq: false, isOrderByReq: false }
+]
+
+const apiActions = [
+  { action: 'GET', label: 'Get' },
+  { action: 'POST', label: 'Post' }
+]
+
+const urlList = [
+  {
+    url: 'https://yahoofinance-stocks1.p.rapidapi.com',
+    label: 'Yahoo Finance Stocks',
+    headers: {
+      'X-RapidAPI-Host': 'yahoofinance-stocks1.p.rapidapi.com',
+      'X-RapidAPI-Key': 'd34dc8b7e3msh8b556c365c2e971p14a8b0jsnf88536e94ae6'
+    }
+  }
+]
+const defaultApiPayload = {
+  method: '',
+  url: '',
+  params: {},
+  headers: {}
+};
+
+const formatData = date => date.toISOString().slice(0, 10);
+
 const PricingConfig = () => {
 
-  const [value, setValue] = React.useState(null);
+  const [apiUrl, setApiUrl] = React.useState('');
+  const [apiEndPoint, setApiEndPoint] = React.useState('');
+  const [apiAction, setApiAction] = React.useState('');
+  const [apiSymbol, setApiSymbol] = React.useState('');
+  const [startDate, setStartDate] = React.useState(null);
+  const [endDate, setEndDate] = React.useState(null);
+  const [apiOrderBy, setApiOrderBy] = React.useState('');
+  const [apiPayload, setApiPayload] = React.useState(defaultApiPayload);
+  const [openSnack, setOpenSnack] = React.useState(false);
+  const [alertSeverity, setAlertSeverity] = React.useState('');
+
+  const vertical = 'bottom';
+  const horizontal = 'right';
+
+  const openSnackbar = (alertSeverity) => {
+    setOpenSnack(true);
+    setAlertSeverity(alertSeverity);
+  };
+
+  const closeSnackbar = () => {
+    setOpenSnack(false);
+  };
+
+  const inputOnchange = (event, inputType, value) => {
+    if (event && inputType && value) {
+      const currentPayload = { ...apiPayload };
+      switch (inputType) {
+        case 'apiUrl':
+          currentPayload.url = value.url + (apiEndPoint ? '/' + apiEndPoint.endPoint : '');
+          currentPayload.headers = value.headers;
+          break;
+        case 'endPoint':
+          delete currentPayload.params.StartDateInclusive;
+          delete currentPayload.params.EndDateInclusive;
+          delete currentPayload.params.OrderBy;
+          setStartDate(null);
+          setEndDate(null);
+          setApiOrderBy(null);
+          currentPayload.url = (apiUrl ? apiUrl.url : '') + '/' + value.endPoint;
+          break;
+        case 'action':
+          currentPayload.method = value.action;
+          break;
+        case 'apiHeader':
+          currentPayload.headers = value.headers
+          break;
+        case 'symbol':
+          currentPayload.params.Symbol = value.symbol
+          break;
+        case 'startDate':
+          currentPayload.params.StartDateInclusive = formatData(value)
+          break;
+        case 'endDate':
+          currentPayload.params.EndDateInclusive = formatData(value)
+          break;
+        case 'orderBy':
+          currentPayload.params.OrderBy = value.order
+          break;
+        default:
+          break;
+      }
+      setApiPayload({ ...currentPayload });
+      // console.log(apiPayload);
+    }
+  }
+
+  const submitApiConfig = () => {
+    if (apiUrl && apiEndPoint && apiAction && apiSymbol) {
+      if (apiEndPoint.isDateReq && (!startDate || !endDate)) {
+        openSnackbar('error');
+      } else {
+        console.log(apiPayload);
+        openSnackbar('success');
+      }
+    } else {
+      openSnackbar('error');
+    }
+  }
+
   return (
     <Layout>
       <Seo title="Pricing Configuration" />
@@ -162,36 +164,61 @@ const PricingConfig = () => {
               p: 2,
               display: 'flex',
               flexDirection: 'column',
-              height: 400
+              height: '100%'
             }}
           >
             <Grid container spacing={3} item xs={12} md={12} lg={12}>
               <Grid item xs={12} md={12} lg={12}>
                 <Autocomplete
+                  autoHighlight
                   disablePortal
                   id="apiUrl"
-                  options={top100Films}
-                  renderInput={(params) => <TextField {...params} label="API URL" />}
+                  options={urlList}
+                  onChange={(event, newValue) => {
+                    setApiUrl(newValue);
+                    inputOnchange(event, 'apiUrl', newValue);
+                  }}
+                  renderInput={(params) => <TextField required {...params} label="API URL" />}
                 />
               </Grid>
               <Grid item xs={12} md={12} lg={12}>
-                <TextField id="endPoint" label="End Point" variant="outlined" sx={{ width: '100%' }} />
+                <Autocomplete
+                  autoHighlight
+                  disablePortal
+                  id="endPoint"
+                  options={endPoints}
+                  onChange={(event, newValue) => {
+                    setApiEndPoint(newValue);
+                    inputOnchange(event, 'endPoint', newValue);
+                  }}
+                  renderInput={(params) => <TextField required {...params} label="End Point" />}
+                />
               </Grid>
               <Grid item xs={12} md={12} lg={12}>
                 <Autocomplete
+                  autoHighlight
                   disablePortal
                   id="action"
-                  options={top100Films}
-                  renderInput={(params) => <TextField {...params} label="Action" />}
+                  options={apiActions}
+                  onChange={(event, newValue) => {
+                    setApiAction(newValue)
+                    inputOnchange(event, 'action', newValue);
+                  }}
+                  renderInput={(params) => <TextField required {...params} label="Action" />}
                 />
               </Grid>
               <Grid item xs={12} md={12} lg={12}>
                 <TextField
+                  required
                   sx={{ width: '100%' }}
                   id="apiHeader"
                   label="Header"
                   multiline
+                  value={JSON.stringify(apiPayload.headers, null, 4)}
                   rows={4}
+                  onChange={(event, newValue) => {
+                    inputOnchange(event, 'apiHeader', newValue);
+                  }}
                   placeholder="API Header"
                 />
               </Grid>
@@ -204,52 +231,73 @@ const PricingConfig = () => {
               p: 2,
               display: 'flex',
               flexDirection: 'column',
-              height: 400
+              height: '100%'
             }}
           >
             <Grid container spacing={3} item xs={12} md={12} lg={12}>
               <Grid item xs={12} md={12} lg={12}>
                 <Autocomplete
+                  autoHighlight
                   disablePortal
                   id="symbol"
-                  options={top100Films}
-                  renderInput={(params) => <TextField {...params} label="Symbol" />}
+                  options={symbols}
+                  onChange={(event, newValue) => {
+                    setApiSymbol(newValue);
+                    inputOnchange(event, 'symbol', newValue);
+                  }}
+                  renderInput={(params) => <TextField required {...params} label="Symbol" />}
                 />
               </Grid>
-              <Grid item xs={12} md={12} lg={12}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    className="TestClass"
-                    label="Start Date"
-                    value={value}
-                    onChange={(newValue) => {
-                      setValue(newValue);
-                    }}
-                    renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
-                  />
-                </LocalizationProvider>
-              </Grid>
-              <Grid item xs={12} md={12} lg={12}>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    className="TestClass"
-                    label="End Date"
-                    value={value}
-                    onChange={(newValue) => {
-                      setValue(newValue);
-                    }}
-                    renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
-                  />
-                </LocalizationProvider>
-              </Grid>
-              <Grid item xs={12} md={12} lg={12}>
-                <Autocomplete
-                  disablePortal
-                  id="orderBy"
-                  options={top100Films}
-                  renderInput={(params) => <TextField {...params} label="Order By" />}
-                />
-              </Grid>
+              {apiEndPoint && apiEndPoint.isDateReq && (
+                <>
+                  <Grid item xs={12} md={12} lg={12}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <DatePicker
+                        id="startDate"
+                        label="Start Date"
+                        value={startDate}
+                        onChange={(newValue) => {
+                          setStartDate(newValue);
+                          inputOnchange(true, 'startDate', newValue);
+                        }}
+                        renderInput={(params) => <TextField required sx={{ width: '100%' }} {...params} />}
+                      />
+                    </LocalizationProvider>
+                  </Grid>
+                  <Grid item xs={12} md={12} lg={12}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <DatePicker
+                        id="endDate"
+                        label="End Date"
+                        value={endDate}
+                        onChange={(newValue) => {
+                          setEndDate(newValue);
+                          inputOnchange(true, 'endDate', newValue);
+                        }}
+                        renderInput={(params) => <TextField required sx={{ width: '100%' }} {...params} />}
+                      />
+                    </LocalizationProvider>
+                  </Grid>
+                </>
+              )}
+              {apiEndPoint && apiEndPoint.isOrderByReq && (
+                <>
+                  <Grid item xs={12} md={12} lg={12}>
+                    <Autocomplete
+                      autoHighlight
+                      disablePortal
+                      id="orderBy"
+                      options={orderBy}
+                      value={apiOrderBy ? apiOrderBy.order : ''}
+                      onChange={(event, newValue) => {
+                        setApiOrderBy(newValue)
+                        inputOnchange(event, 'orderBy', newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} label="Order By" />}
+                    />
+                  </Grid>
+                </>
+              )}
             </Grid>
           </Paper>
         </Grid>
@@ -259,18 +307,40 @@ const PricingConfig = () => {
               p: 2,
               display: 'flex',
               flexDirection: 'column',
-              height: 400
+              height: '100%'
             }}
           >
             <Grid container spacing={3} item xs={12} md={12} lg={12}>
-              <Grid item xs={12} md={12} lg={12}> preview</Grid>
+              <Grid item xs={12} md={12} lg={12}>
+                <Typography
+                  component="h3"
+                  variant="h6"
+                  color="inherit"
+                  noWrap
+                  sx={{ flexGrow: 1 }}
+                >
+                  API Configuration Preview
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={12} lg={12}>
+                <pre className="pre">
+                  <code>
+                    {JSON.stringify(apiPayload, null, 4)}
+                  </code>
+                </pre>
+              </Grid>
               <Grid item xs={12} md={12} lg={12} textAlign="right" alignSelf="flex-end">
-                <Button variant="contained">Submit</Button>
+                <Button variant="contained" onClick={submitApiConfig}>Submit</Button>
               </Grid>
             </Grid>
           </Paper>
         </Grid>
 
+        <Snackbar open={openSnack} autoHideDuration={5000} onClose={closeSnackbar} anchorOrigin={{ vertical, horizontal }} key={vertical + horizontal}>
+          <Alert onClose={closeSnackbar} severity={alertSeverity} sx={{ width: '100%' }}>
+            {alertSeverity === 'error' ? 'Please enter required fields' : 'Config saved successfully'}
+          </Alert>
+        </Snackbar>
       </Grid>
     </Layout>
   )
