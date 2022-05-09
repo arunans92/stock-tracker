@@ -15,12 +15,13 @@ export async function getDataFromRapidAPI() {
     try {
         const options = {
             method: 'GET',
-            url: 'https://yahoofinance-stocks1.p.rapidapi.com/stock-prices',
+            // url: 'https://yahoofinance-stocks1.p.rapidapi.com/stock-prices',
+            url: 'https://yahoofinance-stocks1.p.rapidapi.com/stock-metadata',
             params: {
-                EndDateInclusive: '2020-04-01',
-                StartDateInclusive: '2020-01-01',
-                Symbol: 'MSFT',
-                OrderBy: 'Ascending'
+                // EndDateInclusive: '2020-04-01',
+                // StartDateInclusive: '2020-01-01',
+                Symbol: 'TECHM.NS',
+                // OrderBy: 'Ascending'
             },
             headers: {
                 'X-RapidAPI-Host': 'yahoofinance-stocks1.p.rapidapi.com',
