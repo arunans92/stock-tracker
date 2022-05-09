@@ -8,7 +8,7 @@ import Paper from '@mui/material/Paper';
 
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-
+import { getDataFromRapidAPI } from "../services/invokeFunctionService";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -37,7 +37,7 @@ const symbols = [
 
 const endPoints = [
   { endPoint: 'stock-prices', label: 'Historic Stock Prices', isDateReq: true, isOrderByReq: true },
-  { endPoint: 'stock-statistics', label: 'Live Stock Statistics', isDateReq: false, isOrderByReq: false }
+  { endPoint: 'stock-metadata', label: 'Live Stock Statistics', isDateReq: false, isOrderByReq: false }
 ]
 
 const apiActions = [
@@ -138,6 +138,10 @@ const PricingConfig = () => {
         openSnackbar('error');
       } else {
         console.log(apiPayload);
+        const data = getDataFromRapidAPI(apiPayload);
+        data.then((response) => {
+          console.log(response)
+        });
         openSnackbar('success');
       }
     } else {
