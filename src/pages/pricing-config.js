@@ -8,7 +8,8 @@ import Paper from '@mui/material/Paper';
 
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { getDataFromRapidAPI } from "../services/invokeFunctionService";
+// import { getDataFromRapidAPI } from "../services/invokeFunctionService";
+import faunadbApi from "../services/faunadbApi"
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -138,10 +139,22 @@ const PricingConfig = () => {
         openSnackbar('error');
       } else {
         console.log(apiPayload);
-        const data = getDataFromRapidAPI(apiPayload);
-        data.then((response) => {
-          console.log(response)
-        });
+
+        // Get Data from RapidAPI
+
+        // const data = getDataFromRapidAPI(apiPayload);
+        // data.then((response) => {
+        //   console.log(response)
+        // });
+
+        // Make API request to post data to fuanaDb
+
+        faunadbApi.create(apiPayload).then((response) => {
+          console.log(response);
+        }).catch((e) => {
+          console.log('An API error occurred', e);
+        })
+
         openSnackbar('success');
       }
     } else {
