@@ -7,7 +7,8 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import StarIcon from '@mui/icons-material/Star';
+// import StarIcon from '@mui/icons-material/Star';
+import Favorite from '@mui/icons-material/Favorite';
 import { Link } from "gatsby";
 
 const MainListItems = (isAdmin) => {
@@ -23,7 +24,7 @@ const MainListItems = (isAdmin) => {
           </ListItemButton>
           <ListItemButton component={Link} to="/favorites">
             <ListItemIcon>
-              <StarIcon />
+              <Favorite />
             </ListItemIcon>
             <ListItemText primary="Favorites" />
           </ListItemButton>
