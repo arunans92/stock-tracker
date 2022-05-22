@@ -9,8 +9,8 @@ const post = (data) => {
     })
 }
 
-const get = async () => {
-    return axios.get('/.netlify/functions/get-symbol-config').then(response => {
+const get = async (functionName) => {
+    return axios.get('/.netlify/functions/' + functionName).then(response => {
         return response
     })
 }

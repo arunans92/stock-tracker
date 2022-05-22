@@ -5,6 +5,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 
+import sessionData from '../utils/sessionHanding'
+
 export const SignOutButton = () => {
     const { instance } = useMsal();
 
@@ -15,8 +17,10 @@ export const SignOutButton = () => {
         setAnchorEl(null);
 
         if (logoutType === "popup") {
+            sessionData.removeUsers();
             instance.logoutPopup();
         } else if (logoutType === "redirect") {
+            sessionData.removeUsers();
             instance.logoutRedirect();
         }
     }

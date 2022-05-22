@@ -16,6 +16,8 @@ import MuiAlert from '@mui/material/Alert';
 
 import httpService from "../services/httpService"
 import { getDataFromRapidAPI } from "../services/invokeFunctionService";
+import marketLiveData from "../marketLiveData"
+import sessionHanding from "../utils/sessionHanding"
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -60,10 +62,9 @@ const MarketData = () => {
       data.then((response) => {
         if(response.status === 200){
           setLiveMarketData(response.data)
-          console.log(liveMarketData);
-          console.log(response.data)
         }
       });
+      // setLiveMarketData(marketLiveData)
 
     } else {
       openSnackbar('warning');
@@ -71,7 +72,7 @@ const MarketData = () => {
   }
 
   React.useEffect(() => {
-    httpService.get().then((response) => {
+    httpService.get('get-symbol-config').then((response) => {
       if (response.status === 200) {
         const symbols = []
         response.data.forEach(function (data) {
@@ -91,6 +92,23 @@ const MarketData = () => {
       console.log('An API error occurred', e);
     })
   }, []);
+
+  const favChange = (event) => {
+    console.log(event.target.checked);
+  };
+  
+  const checkIsFav = () => {
+    const users = sessionHanding.getUsers()
+    let isFav = false;
+    if(users){
+      users.forEach(function (user) {
+        if(user.preferences.favorites.indexOf(liveMarketData.result.symbol) >= 0){
+          isFav = true;
+        }
+      })
+    }
+    return isFav;
+  }
 
   return (
     <Layout>
@@ -184,7 +202,13 @@ const MarketData = () => {
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell>
-                        <Checkbox className="favIcon" icon={<FavoriteBorder />} checkedIcon={<Favorite />} />
+                        <Checkbox
+                          className="favIcon"
+                          icon={<FavoriteBorder />}
+                          checkedIcon={<Favorite />}
+                          checked={checkIsFav()}
+                          onChange={favChange}
+                        />
                       </TableCell>
                       <TableCell component="th" scope="row">
                         {liveMarketData.result.symbol}

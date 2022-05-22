@@ -46,7 +46,7 @@ const marketLiveData = {
         "fiftyTwoWeekLow": 941.4,
         "fiftyTwoWeekHigh": 1838,
         "priceHint": 2,
-        "symbol": "TECHM.NS"
+        "symbol": "ICICIBANK.NS"
     },
     "responseStatus": null
 }

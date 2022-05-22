@@ -12,20 +12,46 @@ import Footer from "./footer"
 import "./layout.css"
 import { useMsal } from "@azure/msal-react";
 
-import userDetails from "../userDetails"
+// import userDetails from "../userDetails"
 import UnAuthenticatedLayout from "./unAuthenticatedLayout"
+import httpService from "../services/httpService"
+import sessionData from "../utils/sessionHanding"
 
 const AuthenticatedLayout = ({ children, data }) => {
     const { accounts } = useMsal();
+    const [userList, setUserList] = React.useState([]);
+    const [isValidUser, setIsValidUser] = React.useState(false);
+    const [validUserList, setValidUserList] = React.useState([]);
 
-    let isValidUser = false;
-    let validUserList = [];
+    React.useEffect(() => {
+        const users = sessionData.getUsers();
+        if (!users) {
+            httpService.get('user-info').then((response) => {
+                if (response.status === 200) {
+                    const users = [];
+                    response.data.forEach(function (data) {
+                        users.push(data.data)
+                    });
+                    console.log(users)
+                    setUserList(users)
+                    checkUserIsValid(users, accounts)
+                }
+            }).catch((e) => {
+                console.log('An API error occurred', e);
+            })
+        } else {
+            checkUserIsValid(users, accounts)
+        }
+    }, [accounts]);
 
-    if (accounts && accounts[0]) {
-        validUserList = userDetails.filter(user => user.username === accounts[0].username);
-
-        if (validUserList && validUserList.length > 0) {
-            isValidUser = true
+    const checkUserIsValid = (users, accounts) => {
+        if (accounts && accounts[0]) {
+            let uList = users.filter(user => user.username === accounts[0].username);
+            if (uList && uList.length > 0) {
+                setIsValidUser(true)
+                setValidUserList(uList)
+                sessionData.setUsers(uList)
+            }
         }
     }
 

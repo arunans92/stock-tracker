@@ -128,7 +128,7 @@ const Header = ({ siteTitle, accounts, systemAccount }) => {
           >
             <Typography component="p" sx={{ flexGrow: 1 }} className="userRole">
               <Avatar component="span" className="avatar">A</Avatar>
-              <span className="mr-2 role" >{accounts[0].name}</span>
+              <span className="mr-2 role" >{systemAccount.name}</span>
             </Typography>
 
             <IconButton onClick={toggleDrawer}>
