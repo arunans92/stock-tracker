@@ -1,5 +1,5 @@
-const faunadb = require('faunadb')
-const q = faunadb.query
+const faunadb = require('faunadb');
+const q = faunadb.query;
 
 exports.handler = async (event, context) => {
 
@@ -11,7 +11,8 @@ exports.handler = async (event, context) => {
   const data = JSON.parse(event.body)
   const item = { data: data }
 
-  return client.query(q.Create(q.Ref('classes/apiconfig'), item))
+  return client
+    .query(q.Create(q.Ref('classes/apiconfigs'), item))
     .then((response) => {
       console.log('success', response)
       return {

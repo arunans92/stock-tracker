@@ -1,19 +1,20 @@
 /* Api methods to call /functions */
 import axios from 'axios'
 
-const create = (data) => {
-    return axios.post('/.netlify/functions/faunadb', {
+const post = (data) => {
+    return axios.post('/.netlify/functions/api-config', {
         body: JSON.stringify(data)
     }).then(response => {
         return response
     })
 }
 
-//   const readAll = () => {
-//     return fetch('/.netlify/functions/todos-read-all').then((response) => {
-//       return response.json()
-//     })
-//   }
+const get = async () => {
+    return axios.get('/.netlify/functions/get-symbol-config').then(response => {
+        return response
+    })
+}
+
 
 //   const update = (todoId, data) => {
 //     return fetch(`/.netlify/functions/todos-update/${todoId}`, {
@@ -44,8 +45,8 @@ const create = (data) => {
 //   }
 
 export default {
-    create: create,
-    // readAll: readAll,
+    post: post,
+    get: get,
     // update: update,
     // delete: deleteTodo,
     // batchDelete: batchDeleteTodo

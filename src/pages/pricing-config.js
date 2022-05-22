@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 // import { getDataFromRapidAPI } from "../services/invokeFunctionService";
-import faunadbApi from "../services/faunadbApi"
+import httpService from "../services/httpService"
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -149,7 +149,7 @@ const PricingConfig = () => {
 
         // Make API request to post data to fuanaDb
 
-        faunadbApi.create(apiPayload).then((response) => {
+        httpService.post(apiPayload).then((response) => {
           console.log(response);
         }).catch((e) => {
           console.log('An API error occurred', e);
@@ -161,6 +161,23 @@ const PricingConfig = () => {
       openSnackbar('error');
     }
   }
+
+  // const HTTPConnect = (apiPayload) => {
+  //   const [response, responseSet] = React.useState(null)
+
+  //   React.useEffect(() => {
+  //     httpService.post(apiPayload).then((response) => {
+  //       console.log(response);
+  //       responseSet(response);
+  //       openSnackbar('success');
+  //     }).catch((e) => {
+  //       console.log('An API error occurred', e);
+  //       responseSet(e);
+  //     })
+  //   }, [])
+
+  //   return response
+  // }
 
   return (
     <Layout>

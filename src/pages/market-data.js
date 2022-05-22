@@ -3,7 +3,6 @@ import Button from "@mui/material/Button";
 
 import Layout from "../components/layout"
 import Seo from "../components/seo"
-import marketLiveData from "../marketLiveData";
 
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -15,6 +14,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
+import httpService from "../services/httpService"
+import { getDataFromRapidAPI } from "../services/invokeFunctionService";
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -31,26 +32,9 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 
-
-// function invokefunction() {
-
-//   getDataFromRapidAPI();
-
-// }
-
-const symbols = [
-  { label: 'TECHM.NS', symbol: 'TECHM.NS' },
-  { label: 'MARUTI.NS', symbol: 'MARUTI.NS' },
-  { label: 'ONGC.NS', symbol: 'ONGC.NS' },
-  { label: 'ICICIBANK.NS', symbol: 'ICICIBANK.NS' },
-  { label: 'WIPRO.NS', symbol: 'WIPRO.NS' },
-  { label: 'ULTRACEMCO.NS', symbol: 'ULTRACEMCO.NS' },
-  { label: 'TITAN.NS', symbol: 'TITAN.NS' },
-  { label: 'SHREECEM.NS', symbol: 'SHREECEM.NS' }
-]
-
 const MarketData = () => {
-  const [symbolList, setSymbolList] = React.useState('');
+  const [symbolList, setSymbolList] = React.useState([]);
+  const [selectedSymbol, setSelectedSymbol] = React.useState('');
   const [openSnack, setOpenSnack] = React.useState(false);
   const [alertSeverity, setAlertSeverity] = React.useState('');
   const [liveMarketData, setLiveMarketData] = React.useState(null);
@@ -67,15 +51,46 @@ const MarketData = () => {
     setOpenSnack(false);
   };
   const searchData = () => {
-    if (symbolList) {
-      console.log(symbolList.symbol)
-      setLiveMarketData(marketLiveData)
-      console.log(liveMarketData);
+    if (selectedSymbol) {
+      console.log(selectedSymbol.symbol)
+
+      // Get Data from RapidAPI
+
+      const data = getDataFromRapidAPI(selectedSymbol.config);
+      data.then((response) => {
+        if(response.status === 200){
+          setLiveMarketData(response.data)
+          console.log(liveMarketData);
+          console.log(response.data)
+        }
+      });
 
     } else {
       openSnackbar('warning');
     }
   }
+
+  React.useEffect(() => {
+    httpService.get().then((response) => {
+      if (response.status === 200) {
+        const symbols = []
+        response.data.forEach(function (data) {
+          const parsedData = JSON.parse(data.data.body);
+          const symbolData = {
+            label: parsedData.params.Symbol,
+            symbol: parsedData.params.Symbol,
+            config: parsedData
+          }
+          symbols.push(symbolData)
+        });
+        console.log(symbols)
+        setSymbolList(symbols)
+      }
+
+    }).catch((e) => {
+      console.log('An API error occurred', e);
+    })
+  }, []);
 
   return (
     <Layout>
@@ -116,9 +131,9 @@ const MarketData = () => {
                   autoHighlight
                   disablePortal
                   id="symbol"
-                  options={symbols}
+                  options={symbolList}
                   onChange={(event, newValue) => {
-                    setSymbolList(newValue);
+                    setSelectedSymbol(newValue);
                   }}
                   renderInput={(params) => <TextField required {...params} label="Symbol" />}
                 />
