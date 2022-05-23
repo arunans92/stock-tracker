@@ -59,13 +59,14 @@ const MarketData = () => {
 
       // Get Data from RapidAPI
 
-      // const data = getDataFromRapidAPI(selectedSymbol.config);
-      // data.then((response) => {
-      //   if(response.status === 200){
-      //     setLiveMarketData(response.data)
-      //   }
-      // });
-      setLiveMarketData(marketLiveData)
+      const data = getDataFromRapidAPI(selectedSymbol.config);
+      data.then((response) => {
+        if(response.status === 200){
+          setLiveMarketData(response.data)
+        }
+      });
+      // setLiveMarketData(marketLiveData);
+      
       const user = sessionHanding.getUser();
       setUserInfo(user);
 

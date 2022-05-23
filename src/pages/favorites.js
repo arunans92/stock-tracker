@@ -25,6 +25,37 @@ const Favorites = () => {
 
   const [favSymbolList, setFavSymbolList] = React.useState([]);
   const [symbolConfigList, setSymbolConfigList] = React.useState([]);
+  const [userInfo, setUserInfo] = React.useState([]);
+
+
+  
+  const favChange = (event, symbol) => {
+    const user = userInfo[0];
+    console.log(event.target.checked);
+    console.log(symbol);
+
+    if (user.preferences.favorites.indexOf(symbol) >= 0) {
+      user.preferences.favorites.splice(user.preferences.favorites.indexOf(symbol), 1)
+    } else {
+      user.preferences.favorites = [...user.preferences.favorites, symbol];
+    }
+    console.log(user);
+    sessionHanding.setUsers([user]);
+    setUserInfo([user]);
+    
+    httpService.update(user).then((response) => {
+      console.log(response)
+    })
+  };
+
+  const checkIsFav = (symbol) => {
+    const user = userInfo[0];
+    let isFav = false;
+    if (user && user.preferences.favorites.indexOf(symbol) >= 0) {
+      isFav = true;
+    }
+    return isFav;
+  }
 
   React.useEffect(() => {
     httpService.get('get-symbol-config').then((response) => {
@@ -33,6 +64,7 @@ const Favorites = () => {
         response.data.forEach(function (data) {
           const parsedData = JSON.parse(data.data.body);
           const users = sessionHanding.getUser();
+          setUserInfo(users);
           if (users) {
             users.forEach(function (user) {
               if (user.preferences.favorites.indexOf(parsedData.params.Symbol) >= 0) {
@@ -47,18 +79,18 @@ const Favorites = () => {
         symbols.forEach(function (req, index) {
           // Get Data from RapidAPI
           setTimeout(function () {
-            // const apiData = getDataFromRapidAPI(req);
-            // apiData.then((response) => {
-            //   console.log(response)
-            //   if (response.status === 200) {
-            //     marketData.push(response.data.result);
-            //     setFavSymbolList([...marketData]);
-            //     console.log(marketData);
-            //   }
-            // });
-            marketData.push({ regularMarketPrice: 1261.15, regularMarketChangePercent: -2.2932384, symbol: 'TECHM.NS' + index });
-            console.log(marketData);
-            setFavSymbolList([...marketData]);
+            const apiData = getDataFromRapidAPI(req);
+            apiData.then((response) => {
+              console.log(response)
+              if (response.status === 200) {
+                marketData.push(response.data.result);
+                setFavSymbolList([...marketData]);
+                console.log(marketData);
+              }
+            });
+            // marketData.push({ regularMarketPrice: 1261.15, regularMarketChangePercent: -2.2932384, symbol: 'TECHM.NS' + index });
+            // console.log(marketData);
+            // setFavSymbolList([...marketData]);
           }, index * 2000);
         })
       }
@@ -92,7 +124,7 @@ const Favorites = () => {
                 height: 240,
               }}
             >
-              <FavCard data={data} />
+              <FavCard data={data} checkIsFav={checkIsFav} favChange={favChange} />
             </Paper>
           </Grid>
         ))}

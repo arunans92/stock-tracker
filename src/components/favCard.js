@@ -8,12 +8,18 @@ import Favorite from '@mui/icons-material/Favorite';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
-const FavCard = ({ data }) => {
+const FavCard = ({ data, checkIsFav, favChange }) => {
     return (
         <React.Fragment>
             <Typography component="h2" variant="h6" color="primary" gutterBottom>
                 {data.symbol}
-                <Checkbox checked={true} className="favIcon" icon={<FavoriteBorder />} checkedIcon={<Favorite />} />
+                <Checkbox
+                    checked={checkIsFav(data.symbol)}
+                    className="favIcon"
+                    icon={<FavoriteBorder />}
+                    onChange={(event) => favChange(event, data.symbol)}
+                    checkedIcon={<Favorite />}
+                />
             </Typography>
             <Typography component="p" variant="h4">
                 {data.regularMarketPrice}
