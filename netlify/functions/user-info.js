@@ -14,12 +14,20 @@ exports.handler = async (event, context) => {
             const dataRefs = response.data
             console.log(`${dataRefs.length} found`)
             const getAllDataQuery = dataRefs.map((ref) => {
-                return q.Get(ref)
+                return {
+                    refId: ref.id,
+                    res: q.Get(ref)
+                }
             })
             return client.query(getAllDataQuery).then((ret) => {
+                const responseData = [];
+                ret.map((data) => {
+                    data.res.data.id = data.refId;
+                    responseData.push(data.res);
+                })
                 return {
                     statusCode: 200,
-                    body: JSON.stringify(ret)
+                    body: JSON.stringify(responseData)
                 }
             })
         }).catch((error) => {

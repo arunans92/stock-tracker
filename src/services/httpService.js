@@ -15,15 +15,14 @@ const get = async (functionName) => {
     })
 }
 
-
-//   const update = (todoId, data) => {
-//     return fetch(`/.netlify/functions/todos-update/${todoId}`, {
-//       body: JSON.stringify(data),
-//       method: 'POST'
-//     }).then(response => {
-//       return response.json()
-//     })
-//   }
+const update = (data) => {
+    console.log(data)
+    return axios.post('/.netlify/functions/update-user-fav', {
+        body: JSON.stringify(data)
+    }).then(response => {
+        return response
+    })
+}
 
 //   const deleteTodo = (todoId) => {
 //     return fetch(`/.netlify/functions/todos-delete/${todoId}`, {
@@ -47,7 +46,7 @@ const get = async (functionName) => {
 export default {
     post: post,
     get: get,
-    // update: update,
+    update: update,
     // delete: deleteTodo,
     // batchDelete: batchDeleteTodo
 }

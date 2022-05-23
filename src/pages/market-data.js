@@ -40,6 +40,7 @@ const MarketData = () => {
   const [openSnack, setOpenSnack] = React.useState(false);
   const [alertSeverity, setAlertSeverity] = React.useState('');
   const [liveMarketData, setLiveMarketData] = React.useState(null);
+  const [userInfo, setUserInfo] = React.useState([]);
 
   const vertical = 'bottom';
   const horizontal = 'right';
@@ -58,13 +59,15 @@ const MarketData = () => {
 
       // Get Data from RapidAPI
 
-      const data = getDataFromRapidAPI(selectedSymbol.config);
-      data.then((response) => {
-        if(response.status === 200){
-          setLiveMarketData(response.data)
-        }
-      });
-      // setLiveMarketData(marketLiveData)
+      // const data = getDataFromRapidAPI(selectedSymbol.config);
+      // data.then((response) => {
+      //   if(response.status === 200){
+      //     setLiveMarketData(response.data)
+      //   }
+      // });
+      setLiveMarketData(marketLiveData)
+      const user = sessionHanding.getUser();
+      setUserInfo(user);
 
     } else {
       openSnackbar('warning');
@@ -93,19 +96,30 @@ const MarketData = () => {
     })
   }, []);
 
-  const favChange = (event) => {
+  const favChange = (event, symbol) => {
+    const user = userInfo[0];
     console.log(event.target.checked);
+    console.log(symbol);
+
+    if (user.preferences.favorites.indexOf(symbol) >= 0) {
+      user.preferences.favorites.splice(user.preferences.favorites.indexOf(symbol), 1)
+    } else {
+      user.preferences.favorites = [...user.preferences.favorites, symbol];
+    }
+    console.log(user);
+    sessionHanding.setUsers([user]);
+    setUserInfo([user]);
+    
+    httpService.update(user).then((response) => {
+      console.log(response)
+    })
   };
-  
+
   const checkIsFav = () => {
-    const users = sessionHanding.getUser()
+    const user = userInfo[0];
     let isFav = false;
-    if(users){
-      users.forEach(function (user) {
-        if(user.preferences.favorites.indexOf(liveMarketData.result.symbol) >= 0){
-          isFav = true;
-        }
-      })
+    if (user && user.preferences.favorites.indexOf(liveMarketData.result.symbol) >= 0) {
+      isFav = true;
     }
     return isFav;
   }
@@ -202,13 +216,15 @@ const MarketData = () => {
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell>
-                        <Checkbox
-                          className="favIcon"
-                          icon={<FavoriteBorder />}
-                          checkedIcon={<Favorite />}
-                          checked={checkIsFav()}
-                          onChange={favChange}
-                        />
+                        {userInfo && (
+                          <Checkbox
+                            className="favIcon"
+                            icon={<FavoriteBorder />}
+                            checkedIcon={<Favorite />}
+                            checked={checkIsFav()}
+                            onChange={(event) => favChange(event, liveMarketData.result.symbol)}
+                          />
+                        )}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         {liveMarketData.result.symbol}

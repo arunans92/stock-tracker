@@ -47,18 +47,18 @@ const Favorites = () => {
         symbols.forEach(function (req, index) {
           // Get Data from RapidAPI
           setTimeout(function () {
-            const apiData = getDataFromRapidAPI(req);
-            apiData.then((response) => {
-              console.log(response)
-              if (response.status === 200) {
-                marketData.push(response.data.result);
-                setFavSymbolList([...marketData]);
-                console.log(marketData);
-              }
-            });
-            // marketData.push({ regularMarketPrice: 1261.15, regularMarketChangePercent: -2.2932384, symbol: 'TECHM.NS' + index });
-            // console.log(marketData);
-            // setFavSymbolList([...marketData]);
+            // const apiData = getDataFromRapidAPI(req);
+            // apiData.then((response) => {
+            //   console.log(response)
+            //   if (response.status === 200) {
+            //     marketData.push(response.data.result);
+            //     setFavSymbolList([...marketData]);
+            //     console.log(marketData);
+            //   }
+            // });
+            marketData.push({ regularMarketPrice: 1261.15, regularMarketChangePercent: -2.2932384, symbol: 'TECHM.NS' + index });
+            console.log(marketData);
+            setFavSymbolList([...marketData]);
           }, index * 2000);
         })
       }
