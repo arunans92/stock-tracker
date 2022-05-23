@@ -22,7 +22,7 @@ exports.handler = async (event, context) => {
             return client.query(getAllDataQuery).then((ret) => {
                 const responseData = [];
                 ret.map((data) => {
-                    data.res.data.id = data.refId;
+                    data.res.data.body.id = data.refId;
                     responseData.push(data.res);
                 })
                 return {

@@ -16,7 +16,7 @@ import MuiAlert from '@mui/material/Alert';
 
 import httpService from "../services/httpService"
 import { getDataFromRapidAPI } from "../services/invokeFunctionService";
-import marketLiveData from "../marketLiveData"
+// import marketLiveData from "../marketLiveData"
 import sessionHanding from "../utils/sessionHanding"
 
 import Table from '@mui/material/Table';

@@ -19,7 +19,7 @@ import sessionData from "../utils/sessionHanding"
 
 const AuthenticatedLayout = ({ children, data }) => {
     const { accounts } = useMsal();
-    const [userList, setUserList] = React.useState([]);
+    // const [userList, setUserList] = React.useState([]);
     const [isValidUser, setIsValidUser] = React.useState(false);
     const [validUserList, setValidUserList] = React.useState([]);
 
@@ -30,10 +30,10 @@ const AuthenticatedLayout = ({ children, data }) => {
                 if (response.status === 200) {
                     const users = [];
                     response.data.forEach(function (data) {
-                        users.push(data.data)
+                        users.push(data.data.body)
                     });
-                    console.log(users)
-                    setUserList(users)
+                    // console.log(users)
+                    // setUserList(users)
                     checkUserIsValid(users, accounts)
                 }
             }).catch((e) => {

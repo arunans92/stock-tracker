@@ -77,8 +77,8 @@ const Favorites = () => {
         setSymbolConfigList(symbols);
         const marketData = [];
         symbols.forEach(function (req, index) {
-          // Get Data from RapidAPI
           setTimeout(function () {
+            // Get Data from RapidAPI
             const apiData = getDataFromRapidAPI(req);
             apiData.then((response) => {
               console.log(response)
