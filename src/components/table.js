@@ -60,7 +60,7 @@ const EnhancedTableToolbar = (props) => {
                 component="div"
             >
                 {tableToolbarHeader}
-          </Typography>
+            </Typography>
         </Toolbar>
     );
 };
@@ -157,7 +157,7 @@ const EnhancedTable = ({ enableSelection, tableData, headCells, tableToolbarHead
                                 .map((row, index) => {
 
                                     return (
-                                        <TableRow hover>
+                                        <TableRow hover key={row.date}>
                                             <TableCell align="left">{row.date}</TableCell>
                                             <TableCell align="right">{row.open}</TableCell>
                                             <TableCell align="right">{row.high}</TableCell>

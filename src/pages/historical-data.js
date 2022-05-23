@@ -3,7 +3,9 @@ import * as React from "react"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 import EnhancedTable from "../components/table"
-import marketData from "../marketData"
+// import marketData from "../marketData"
+import httpService from "../services/httpService"
+import { getDataFromRapidAPI } from "../services/invokeFunctionService";
 
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -61,22 +63,23 @@ const headCells = [
 ];
 
 
-const symbols = [
-  { label: 'TECHM.NS', symbol: 'TECHM.NS' },
-  { label: 'MARUTI.NS', symbol: 'MARUTI.NS' },
-  { label: 'ONGC.NS', symbol: 'ONGC.NS' },
-  { label: 'ICICIBANK.NS', symbol: 'ICICIBANK.NS' },
-  { label: 'WIPRO.NS', symbol: 'WIPRO.NS' },
-  { label: 'ULTRACEMCO.NS', symbol: 'ULTRACEMCO.NS' },
-  { label: 'TITAN.NS', symbol: 'TITAN.NS' },
-  { label: 'SHREECEM.NS', symbol: 'SHREECEM.NS' }
-]
+// const symbols = [
+//   { label: 'TECHM.NS', symbol: 'TECHM.NS' },
+//   { label: 'MARUTI.NS', symbol: 'MARUTI.NS' },
+//   { label: 'ONGC.NS', symbol: 'ONGC.NS' },
+//   { label: 'ICICIBANK.NS', symbol: 'ICICIBANK.NS' },
+//   { label: 'WIPRO.NS', symbol: 'WIPRO.NS' },
+//   { label: 'ULTRACEMCO.NS', symbol: 'ULTRACEMCO.NS' },
+//   { label: 'TITAN.NS', symbol: 'TITAN.NS' },
+//   { label: 'SHREECEM.NS', symbol: 'SHREECEM.NS' }
+// ]
 
 const formatData = date => date.toISOString().slice(0, 10);
 
 const HistoricalData = () => {
 
-  const [symbolList, setSymbolList] = React.useState('');
+  const [symbolList, setSymbolList] = React.useState([]);
+  const [selectedSymbol, setSelectedSymbol] = React.useState('');
   const [startDate, setStartDate] = React.useState(null);
   const [endDate, setEndDate] = React.useState(null);
   const [openSnack, setOpenSnack] = React.useState(false);
@@ -98,18 +101,53 @@ const HistoricalData = () => {
   };
 
   const searchData = () => {
-    if (symbolList && startDate & endDate) {
-      console.log(symbolList.symbol)
+    if (selectedSymbol && startDate & endDate) {
+      console.log(selectedSymbol.symbol)
       console.log(formatData(startDate))
       console.log(formatData(endDate))
-      setTableToolbarHeader(`Symbol : ${symbolList.symbol} | Date: From ${formatData(startDate)} To ${formatData(endDate)}`)
-      setHistoricalMarketData(marketData);
-      console.log(historicalMarketData);
+      setTableToolbarHeader(`Symbol : ${selectedSymbol.symbol} | Date: From ${formatData(startDate)} To ${formatData(endDate)}`)
+      
+      // Get Data from RapidAPI
+      selectedSymbol.config.params.StartDateInclusive = formatData(startDate);
+      selectedSymbol.config.params.EndDateInclusive = formatData(endDate);
+
+      const data = getDataFromRapidAPI(selectedSymbol.config);
+      data.then((response) => {
+        if(response.status === 200){
+          console.log(response.data)
+          setHistoricalMarketData(response.data);
+          // setHistoricalMarketData(marketData);
+        }
+      });
+
 
     } else {
       openSnackbar('warning');
     }
   }
+
+  
+  React.useEffect(() => {
+    httpService.get('get-symbol-config').then((response) => {
+      if (response.status === 200) {
+        const symbols = []
+        response.data.forEach(function (data) {
+          const parsedData = data.data.body;
+          const symbolData = {
+            label: parsedData.params.Symbol,
+            symbol: parsedData.params.Symbol,
+            config: parsedData
+          }
+          symbols.push(symbolData)
+        });
+        console.log(symbols)
+        setSymbolList(symbols)
+      }
+
+    }).catch((e) => {
+      console.log('An API error occurred', e);
+    })
+  }, []);
 
   return (
     <Layout>
@@ -150,9 +188,9 @@ const HistoricalData = () => {
                   autoHighlight
                   disablePortal
                   id="symbol"
-                  options={symbols}
+                  options={symbolList}
                   onChange={(event, newValue) => {
-                    setSymbolList(newValue);
+                    setSelectedSymbol(newValue);
                   }}
                   renderInput={(params) => <TextField required {...params} label="Symbol" />}
                 />
