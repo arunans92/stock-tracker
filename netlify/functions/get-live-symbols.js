@@ -24,9 +24,12 @@ exports.handler = async (event, context) => {
                         filterData.push(resData);
                     }
                 });
+                let uniqueObjArray = [
+                    ...new Map(filterData.map((fData) => [fData.data.body.params.Symbol, fData])).values(),
+                ];
                 return {
                     statusCode: 200,
-                    body: JSON.stringify(filterData)
+                    body: JSON.stringify(uniqueObjArray)
                 }
             })
         }).catch((error) => {
