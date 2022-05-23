@@ -80,7 +80,7 @@ const MarketData = () => {
       if (response.status === 200) {
         const symbols = []
         response.data.forEach(function (data) {
-          const parsedData = JSON.parse(data.data.body);
+          const parsedData = data.data.body;
           const symbolData = {
             label: parsedData.params.Symbol,
             symbol: parsedData.params.Symbol,

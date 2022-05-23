@@ -9,6 +9,7 @@ exports.handler = async (event, context) => {
   })
 
   const data = JSON.parse(event.body)
+  data.body = JSON.parse(data.body)
   const item = { data: data }
 
   return client

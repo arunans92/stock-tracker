@@ -62,7 +62,7 @@ const Favorites = () => {
       if (response.status === 200) {
         const symbols = [];
         response.data.forEach(function (data) {
-          const parsedData = JSON.parse(data.data.body);
+          const parsedData = data.data.body;
           const users = sessionHanding.getUser();
           setUserInfo(users);
           if (users) {
