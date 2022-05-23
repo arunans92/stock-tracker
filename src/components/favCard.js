@@ -16,12 +16,12 @@ const FavCard = ({ data }) => {
                 <Checkbox checked={true} className="favIcon" icon={<FavoriteBorder />} checkedIcon={<Favorite />} />
             </Typography>
             <Typography component="p" variant="h4">
-                {data.price}
+                {data.regularMarketPrice}
             </Typography>
             <Typography color="text.secondary" sx={{ flex: 1, mt: 2 }}>
                 {/* {'INR - EQUITY'} */}
-                {data.changePercent > 0 ? (<ArrowUpwardIcon color={'success'} />) : (<ArrowDownwardIcon color={'error'} />)}
-                {data.changePercent + ' %'}
+                {data.regularMarketChangePercent > 0 ? (<ArrowUpwardIcon color={'success'} />) : (<ArrowDownwardIcon color={'error'} />)}
+                {data.regularMarketChangePercent + ' %'}
             </Typography>
             <div>
                 <Link color="primary" to="/market-data">

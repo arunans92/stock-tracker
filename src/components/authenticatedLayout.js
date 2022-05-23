@@ -24,7 +24,7 @@ const AuthenticatedLayout = ({ children, data }) => {
     const [validUserList, setValidUserList] = React.useState([]);
 
     React.useEffect(() => {
-        const users = sessionData.getUsers();
+        const users = sessionData.getUser();
         if (!users) {
             httpService.get('user-info').then((response) => {
                 if (response.status === 200) {

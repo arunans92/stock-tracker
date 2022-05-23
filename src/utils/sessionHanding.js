@@ -1,6 +1,6 @@
 const sessionData = {
 
-    getUsers: function () {
+    getUser: function () {
         return JSON.parse(sessionStorage.getItem("users"));
     },
     setUsers: function (users) {

@@ -98,7 +98,7 @@ const MarketData = () => {
   };
   
   const checkIsFav = () => {
-    const users = sessionHanding.getUsers()
+    const users = sessionHanding.getUser()
     let isFav = false;
     if(users){
       users.forEach(function (user) {
