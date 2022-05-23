@@ -76,7 +76,7 @@ const MarketData = () => {
   }
 
   React.useEffect(() => {
-    httpService.get('get-symbol-config').then((response) => {
+    httpService.get('get-live-symbols').then((response) => {
       if (response.status === 200) {
         const symbols = []
         response.data.forEach(function (data) {

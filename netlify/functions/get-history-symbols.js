@@ -17,9 +17,16 @@ exports.handler = async (event, context) => {
                 return q.Get(ref)
             })
             return client.query(getAllDataQuery).then((ret) => {
+                const filterData = [];
+                ret.map((resData) => {
+                    const urlSplit = resData.data.body.url.split('/');
+                    if (urlSplit[urlSplit.length - 1] === 'stock-prices') {
+                        filterData.push(resData);
+                    }
+                });
                 return {
                     statusCode: 200,
-                    body: JSON.stringify(ret)
+                    body: JSON.stringify(filterData)
                 }
             })
         }).catch((error) => {
