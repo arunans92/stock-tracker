@@ -9,9 +9,6 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
 import { visuallyHidden } from '@mui/utils';
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -42,28 +39,6 @@ function stableSort(array, comparator) {
     });
     return stabilizedThis.map((el) => el[0]);
 }
-
-const EnhancedTableToolbar = (props) => {
-    const { tableToolbarHeader } = props;
-
-    return (
-        <Toolbar
-            sx={{
-                pl: { sm: 2 },
-                pr: { xs: 1, sm: 1 }
-            }}
-        >
-            <Typography
-                sx={{ flex: '1 1 100%' }}
-                variant="h6"
-                id="tableTitle"
-                component="div"
-            >
-                {tableToolbarHeader}
-            </Typography>
-        </Toolbar>
-    );
-};
 
 function EnhancedTableHead(props) {
     const { order, orderBy, onRequestSort, headCells } =
@@ -106,7 +81,7 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired
 };
 
-const EnhancedTable = ({ enableSelection, tableData, headCells, tableToolbarHeader }) => {
+const EnhancedTable = ({ enableSelection, tableData, headCells }) => {
     console.log(enableSelection);
     console.log(tableData);
     const rows = tableData.results;
@@ -135,61 +110,58 @@ const EnhancedTable = ({ enableSelection, tableData, headCells, tableToolbarHead
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
     return (
-        <Box sx={{ width: '100%' }}>
-            <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar tableToolbarHeader={tableToolbarHeader} />
-                <TableContainer>
-                    <Table
-                        sx={{ minWidth: 750 }}
-                        aria-labelledby="tableTitle"
-                    >
-                        <EnhancedTableHead
-                            order={order}
-                            orderBy={orderBy}
-                            onRequestSort={handleRequestSort}
-                            headCells={headCells}
-                        />
-                        <TableBody>
-                            {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+        <Box sx={{ width: '100%', mb: 2 }}>
+            <TableContainer>
+                <Table
+                    sx={{ minWidth: 750 }}
+                    aria-labelledby="tableTitle"
+                >
+                    <EnhancedTableHead
+                        order={order}
+                        orderBy={orderBy}
+                        onRequestSort={handleRequestSort}
+                        headCells={headCells}
+                    />
+                    <TableBody>
+                        {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-                            {stableSort(rows, getComparator(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row, index) => {
+                        {stableSort(rows, getComparator(order, orderBy))
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map((row, index) => {
 
-                                    return (
-                                        <TableRow hover key={row.date}>
-                                            <TableCell align="left">{row.date}</TableCell>
-                                            <TableCell align="right">{row.open}</TableCell>
-                                            <TableCell align="right">{row.high}</TableCell>
-                                            <TableCell align="right">{row.low}</TableCell>
-                                            <TableCell align="right">{row.close}</TableCell>
-                                            <TableCell align="right">{row.volume}</TableCell>
-                                            <TableCell align="right">{row.adjClose}</TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                            {emptyRows > 0 && (
-                                <TableRow
-                                    style={{
-                                        height: (53) * emptyRows,
-                                    }}
-                                >
-                                    <TableCell colSpan={6} />
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            </Paper>
+                                return (
+                                    <TableRow hover key={row.date}>
+                                        <TableCell align="left">{row.date}</TableCell>
+                                        <TableCell align="right">{row.open}</TableCell>
+                                        <TableCell align="right">{row.high}</TableCell>
+                                        <TableCell align="right">{row.low}</TableCell>
+                                        <TableCell align="right">{row.close}</TableCell>
+                                        <TableCell align="right">{row.volume}</TableCell>
+                                        <TableCell align="right">{row.adjClose}</TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                        {emptyRows > 0 && (
+                            <TableRow
+                                style={{
+                                    height: (53) * emptyRows,
+                                }}
+                            >
+                                <TableCell colSpan={6} />
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
         </Box>
     );
 }

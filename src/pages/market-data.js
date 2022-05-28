@@ -28,6 +28,8 @@ import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -61,12 +63,12 @@ const MarketData = () => {
 
       const data = getDataFromRapidAPI(selectedSymbol.config);
       data.then((response) => {
-        if(response.status === 200){
+        if (response.status === 200) {
           setLiveMarketData(response.data)
         }
       });
       // setLiveMarketData(marketLiveData);
-      
+
       const user = sessionHanding.getUser();
       setUserInfo(user);
 
@@ -110,7 +112,7 @@ const MarketData = () => {
     console.log(user);
     sessionHanding.setUsers([user]);
     setUserInfo([user]);
-    
+
     httpService.update(user).then((response) => {
       console.log(response)
     })
@@ -194,6 +196,7 @@ const MarketData = () => {
                   <TableHead>
                     <TableRow>
                       <TableCell>Favorite</TableCell>
+                      <TableCell>Status</TableCell>
                       <TableCell>Symbol</TableCell>
                       <TableCell>Short Name</TableCell>
                       <TableCell>Quote Type</TableCell>
@@ -226,6 +229,13 @@ const MarketData = () => {
                             onChange={(event) => favChange(event, liveMarketData.result.symbol)}
                           />
                         )}
+                      </TableCell>
+                      <TableCell>
+                        {
+                          liveMarketData.result.regularMarketChangePercent > 0 ?
+                            (<ArrowUpwardIcon color={'success'} />) :
+                            (<ArrowDownwardIcon color={'error'} />)
+                        }
                       </TableCell>
                       <TableCell component="th" scope="row">
                         {liveMarketData.result.symbol}

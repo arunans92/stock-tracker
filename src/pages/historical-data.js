@@ -3,6 +3,7 @@ import * as React from "react"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 import EnhancedTable from "../components/table"
+import Chart from "../components/chart"
 // import marketData from "../marketData"
 import httpService from "../services/httpService"
 import { getDataFromRapidAPI } from "../services/invokeFunctionService";
@@ -13,6 +14,11 @@ import Paper from '@mui/material/Paper';
 
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -74,7 +80,62 @@ const headCells = [
 //   { label: 'SHREECEM.NS', symbol: 'SHREECEM.NS' }
 // ]
 
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 0 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+const EnhancedTableToolbar = (props) => {
+  const { tableToolbarHeader } = props;
+
+  return (
+    <Toolbar
+      sx={{
+        pl: { sm: 2 },
+        pr: { xs: 1, sm: 1 }
+      }}
+    >
+      <Typography
+        sx={{ flex: '1 1 100%' }}
+        variant="h6"
+        id="tableTitle"
+        component="div"
+      >
+        {tableToolbarHeader}
+      </Typography>
+    </Toolbar>
+  );
+};
+
 const formatData = date => date.toISOString().slice(0, 10);
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
 
 const HistoricalData = () => {
 
@@ -87,6 +148,12 @@ const HistoricalData = () => {
   const [historicalMarketData, setHistoricalMarketData] = React.useState(null);
 
   const [tableToolbarHeader, setTableToolbarHeader] = React.useState('');
+
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   const vertical = 'bottom';
   const horizontal = 'right';
@@ -106,27 +173,27 @@ const HistoricalData = () => {
       console.log(formatData(startDate))
       console.log(formatData(endDate))
       setTableToolbarHeader(`Symbol : ${selectedSymbol.symbol} | Date: From ${formatData(startDate)} To ${formatData(endDate)}`)
-      
-      // Get Data from RapidAPI
+
       selectedSymbol.config.params.StartDateInclusive = formatData(startDate);
       selectedSymbol.config.params.EndDateInclusive = formatData(endDate);
 
+      // setHistoricalMarketData(marketData);
+      
+      // Get Data from RapidAPI
       const data = getDataFromRapidAPI(selectedSymbol.config);
       data.then((response) => {
         if(response.status === 200){
           console.log(response.data)
           setHistoricalMarketData(response.data);
-          // setHistoricalMarketData(marketData);
         }
       });
-
 
     } else {
       openSnackbar('warning');
     }
   }
 
-  
+
   React.useEffect(() => {
     httpService.get('get-history-symbols').then((response) => {
       if (response.status === 200) {
@@ -229,11 +296,35 @@ const HistoricalData = () => {
         </Grid>
       </Grid>
       {historicalMarketData && (
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={12} lg={12}>
-            <EnhancedTable enableSelection={true} headCells={headCells} tableData={historicalMarketData} tableToolbarHeader={tableToolbarHeader} />
-          </Grid>
-        </Grid>
+        <Box sx={{ width: '100%' }}>
+          <Paper
+            sx={{
+              p: 2,
+            }}
+          >
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                <Tab label="Table" {...a11yProps(0)} />
+                <Tab label="Chart" {...a11yProps(1)} />
+              </Tabs>
+            </Box>
+            <EnhancedTableToolbar tableToolbarHeader={tableToolbarHeader} />
+            <TabPanel value={value} index={0}>
+              <Grid container spacing={0}>
+                <Grid item xs={12} md={12} lg={12}>
+                  <EnhancedTable enableSelection={true} headCells={headCells} tableData={historicalMarketData} tableToolbarHeader={tableToolbarHeader} />
+                </Grid>
+              </Grid>
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <Grid container spacing={0}>
+                <Grid item xs={12} md={12} lg={12} sx={{ height: 300, pb: 3, mb: 3 }}>
+                  <Chart chartData={historicalMarketData} tableToolbarHeader={tableToolbarHeader} />
+                </Grid>
+              </Grid>
+            </TabPanel>
+          </Paper>
+        </Box>
       )}
 
       <Snackbar open={openSnack} autoHideDuration={5000} onClose={closeSnackbar} anchorOrigin={{ vertical, horizontal }} key={vertical + horizontal}>
